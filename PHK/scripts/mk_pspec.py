@@ -35,6 +35,7 @@ try:
                     #this is a stupid hack that I should fix:
                     os.system(COMMAND%(args, antstr, _pol, opts.chan))
                     os.system('mv pspec_boot*.npz %s'%sepdir)
+    D.cleanup()
 except(KeyboardInterrupt):
     sys.exit()
 #os.chdir(pwd)
