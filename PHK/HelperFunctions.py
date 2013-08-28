@@ -32,3 +32,9 @@ def gen_all_seps(calfile='psa898_v003'):
                 for cj in range(ci, Ncol):
                     seps.append('%d,%d'%(rj-ri, cj-ci))
     return seps
+
+def tentothe(x):
+    return map(lambda y: 10**y, x)
+
+def P2D(kpl, kpr, p):
+    return 0.5 * (kpl**2 + kpr**2)**1.5 * p / np.pi**2
