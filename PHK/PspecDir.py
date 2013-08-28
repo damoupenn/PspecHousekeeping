@@ -10,11 +10,11 @@ def mkdir(d):
     if not os.path.exists(d):
         os.mkdir(d)
 def ls(d):
-    return os.listdir(d)
+    return sorted(os.listdir(d))
 
 class PspecDir(object):
 
-    def __init__(self, parent_dir='MyPspec', timestamp=True, seps=['0,1','1,1','-1,1'], new=True):
+    def __init__(self, parent_dir='MyPspec', timestamp=False, seps=['0,1','1,1','-1,1'], new=False):
         self.parent = parent_dir
         self.seps = seps
         if timestamp:
