@@ -34,8 +34,8 @@ class PspecDir(object):
                 mkdir(sepdir)
 
     def cleanup(self):
-        for parent in D.tree:
-            for poldir in D.tree[parent]:
+        for parent in self.tree:
+            for poldir in self.tree[parent]:
                 rm_if_empty(poldir)
-                for sepdir in D.tree[parent][poldir]:
+                for sepdir in self.tree[parent][poldir]:
                     rm_if_empty(sepdir)

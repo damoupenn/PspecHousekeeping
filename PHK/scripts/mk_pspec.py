@@ -5,6 +5,7 @@ from aipy import scripting
 import optparse
 import os
 import sys
+import subprocess as sp
 
 o = optparse.OptionParser()
 scripting.add_standard_options(o, pol=True, chan=True, cal=True)
@@ -31,11 +32,14 @@ try:
                 _pol = poldir.split('/')[-1]
                 for sepdir in D.tree[parent][poldir]:
                     print "Writing data to %s"%sepdir
-                    antstr = PHK.sep2bl([sepdir.split('/')[-1]])[0]
-                    #this is a stupid hack that I should fix:
-                    os.system(COMMAND%(args, antstr, _pol, opts.chan))
-                    os.system('mv pspec_boot*.npz %s'%sepdir)
+                    sep = sepdir.split('/')[-1]
+                    if sep == '0,0':
+                        continue
+                    antstr = PHK.sep2bl([sep])[0]
+                    print COMMAND%(args, antstr, _pol, opts.chan)
+                    sp.call(COMMAND%(args, antstr, _pol, opts.chan), shell=True)
+                    sp.call('mv pspec_boot*.npz %s'%sepdir, shell=True)
+                    sp.call('mv nspec_boot*.npz %s'%sepdir, shell=True)
     D.cleanup()
 except(KeyboardInterrupt):
     sys.exit()
-#os.chdir(pwd)
