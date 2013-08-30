@@ -22,17 +22,15 @@ for parent in D.tree:
         for sepdir in D.tree[parent][poldir]:
             try:
                 k,Pk,Pn = None,[],[]
-                if os.path.exists(sepdir+'/nspec.npz'):
-                    print 'File exists, skipping %s'%sepdir
-                    continue
-
                 for bs in map(lambda x: '%s/%s'%(sepdir, x), PHK.ls(sepdir)):
+                    if not 'boot' in bs:
+                        continue
                     filedata = np.load(bs)
                     if k is None:
                         k = filedata['kpl']
-                    if bs.startswith('nspec'):
+                    if 'nspec' in bs:
                         Pn.append(filedata['pk'])
-                    elif bs.startswith('pspec'):
+                    elif 'pspec' in bs:
                         Pk.append(filedata['pk'])
                     filedata.close()
                 #multiply by scaling factors:
