@@ -10,7 +10,10 @@ def mkdir(d):
     if not os.path.exists(d):
         os.mkdir(d)
 def ls(d):
-    return sorted(os.listdir(d))
+    try:
+        return sorted(os.listdir(d))
+    except(OSError):
+        return []
 
 class PspecDir(object):
 

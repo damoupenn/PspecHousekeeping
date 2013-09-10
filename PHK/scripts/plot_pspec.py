@@ -8,7 +8,11 @@ from pylab import *
 
 #set things here
 parent_dir = sys.argv[1]
-seps = ['0,1','1,1','-1,1']#,'2,1','-2,1','3,1','-3,1']
+#seps = ['0,1','1,1','-1,1','2,1','-2,1','3,1','-3,1']
+seps = ['0,1','1,1','-1,1']
+#seps = ['0,2','1,2','-1,2']
+#seps = ['0,3','1,3','-1,3']
+#seps = ['0,4','1,4','-1,4']
 #seps = PHK.gen_all_seps()
 pols = 'IQUV'
 figheight=6.
@@ -64,5 +68,9 @@ Pax.legend()
 Dax.legend()
 Pax.set_yscale('log')
 Dax.set_yscale('log')
+
+Pfig.suptitle(PHK.get_parent(sys.argv[1]))
+outfile = "%s/IQUV.eps"%D.tree.keys()[0]
+Pfig.savefig(outfile, fmt='eps')
 
 show()

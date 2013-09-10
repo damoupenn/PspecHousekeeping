@@ -48,10 +48,12 @@ def get_parent(dir_string):
         parent = parent[:-1]
     return parent
 
+def uv_from_sep(sepstr, grid_spacing=[4.,32.]):
+    x,y = map(lambda x: float(x), sepstr.split(','))
+    return grid_spacing[0]*x, grid_spacing[1]*y
+
 def kpr_from_sep(sepstr, fq, grid_spacing=[4.,32.]):
-    kx,ky = map(lambda x: float(x), sepstr.split(','))
-    scalar = pspec.dk_deta(pspec.f2z(fq))
-    kx *= scalar*grid_spacing[0]/0.3
-    ky *= scalar*grid_spacing[1]/0.3
-    return np.sqrt(kx**2 + ky**2)
+    kx,ky = uv_from_sep(sepstr, grid_spacing=grid_spacing)
+    scalar = pspec.dk_du(pspec.f2z(fq))*(fq/0.3)
+    return scalar*np.sqrt(kx**2 + ky**2)
 

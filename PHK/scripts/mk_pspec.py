@@ -19,27 +19,40 @@ if opts.seps == 'all':
     seps = PHK.gen_all_seps(calfile=opts.cal)
 else:
     seps = opts.seps.split(';')
-args = ' '.join(args)
 
 COMMAND = 'python pspec_redmult_cov.py %s -a %s -p %s -c %s'
 pwd = os.getcwd()
 
-D = PHK.PspecDir(parent_dir=opts.name, seps=seps)
+def lst_from_filename(filename):
+    return filename.split('.')[-2]
+
 try:
-    for parent in D.tree:
-        for poldir in D.tree[parent]:
-            if poldir.split('/')[-1] in opts.pol.split(','):
-                _pol = poldir.split('/')[-1]
-                for sepdir in D.tree[parent][poldir]:
-                    print "Writing data to %s"%sepdir
-                    sep = sepdir.split('/')[-1]
-                    if sep == '0,0':
-                        continue
-                    antstr = PHK.sep2bl([sep])[0]
-                    print COMMAND%(args, antstr, _pol, opts.chan)
-                    sp.call(COMMAND%(args, antstr, _pol, opts.chan), shell=True)
-                    sp.call('mv pspec_boot*.npz %s'%sepdir, shell=True)
-                    sp.call('mv nspec_boot*.npz %s'%sepdir, shell=True)
-    D.cleanup()
+    for f in args:
+        print "Reading %s"%f
+        print '='*35
+
+        D = PHK.PspecDir(parent_dir="LST_%s"%lst_from_filename(f), seps=seps, new=True)
+        for parent in D.tree:
+            for poldir in D.tree[parent]:
+                if poldir.split('/')[-1] in opts.pol.split(','):
+                    print poldir
+                    _pol = poldir.split('/')[-1]
+                    for sepdir in D.tree[parent][poldir]:
+                        sep = sepdir.split('/')[-1]
+                        if sep == '0,0':
+                            continue
+                        if not sep in seps:
+                            continue
+                        if os.path.exists('%s/pspec.npz'%sepdir):
+                            print sep, "file exists"
+                            continue
+                        print "Writing data to %s"%sepdir
+                        antstr = PHK.sep2bl([sep])[0]
+                        print COMMAND%(f, antstr, _pol, opts.chan)
+                        sp.call(COMMAND%(f, antstr, _pol, opts.chan), shell=True)
+                        sp.call('mv pspec_boot*.npz %s'%sepdir, shell=True)
+                        sp.call('mv nspec_boot*.npz %s'%sepdir, shell=True)
+        D.cleanup()
 except(KeyboardInterrupt):
+    print 'Exited on command.'
     sys.exit()
