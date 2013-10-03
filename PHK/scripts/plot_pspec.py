@@ -30,7 +30,7 @@ for parent in D.tree:
         pol = poldir.split('/')[-1]
         if not pol in pols:
             continue
-        for init in 'pn':
+        for init in 'p':
             for sepdir in D.tree[parent][poldir]:
                 sep = sepdir.split('/')[-1]
                 if not sep in seps or sep == 'all':
